@@ -35,6 +35,41 @@ class UserPayment(models.Model):
 
 
 # Product Management
-    
+class ProductCategory(models.Model):
+    name = models.CharField(max_length=64)
+    desc = models.TextField(max_length=248)
+    created_at = models.DateTimeField(default=timezone.now)
+    modified_at = models.DateTimeField(default=timezone.now)
+    deleted_at = models.DateTimeField(blank=True)
+
+
+class ProductInventory(models.Model):
+    quantity = models.IntegerField()
+    created_at = models.DateTimeField(default=timezone.now)
+    modified_at = models.DateTimeField(default=timezone.now)
+    deleted_at = models.DateTimeField(blank=True)
+
+
+class ProductDiscount(models.Model):
+    name = models.CharField(max_length=64)
+    desc = models.TextField(max_length=248)
+    discount_percent = models.FloatField()
+    active = models.BooleanField()
+    created_at = models.DateTimeField(default=timezone.now)
+    modified_at = models.DateTimeField(default=timezone.now)
+    deleted_at = models.DateTimeField(blank=True)
+
+
+class Product(models.Model):
+    name = models.CharField(max_length=64)
+    desc = models.TextField(max_length=248)
+    sku = models.CharField(max_length=64)
+    category_id = models.ForeignKey(ProductCategory, on_delete=models.PROTECT)
+    inventory_id = models.OneToOneField(ProductInventory, on_delete=models.CASCADE)
+    price = models.FloatField()
+    discount_id = models.ForeignKey(ProductDiscount, on_delete=models.PROTECT)
+    created_at = models.DateTimeField(default=timezone.now)
+    modified_at = models.DateTimeField(default=timezone.now)
+    deleted_at = models.DateTimeField(blank=True)
 
 # Shopping Process
