@@ -4,10 +4,10 @@ import datetime
 
 # User Management
 class User(models.Model):
-    username = models.CharField(max_length=15)
-    password = models.CharField(max_length=64)
-    first_name = models.CharField(max_length=24)
-    last_name = models.CharField(max_length=24)
+    username = models.CharField(max_length=248)
+    password = models.CharField(max_length=248)
+    first_name = models.CharField(max_length=64)
+    last_name = models.CharField(max_length=64)
     telephone = models.IntegerField()
     created_at = models.DateTimeField(default=timezone.now)
     modified_at = models.DateTimeField(default=timezone.now)
@@ -60,6 +60,10 @@ class ProductDiscount(models.Model):
     deleted_at = models.DateTimeField(blank=True)
 
 
+class Option(models.Model):
+    name: models.CharField(max_length=64)
+
+
 class Product(models.Model):
     name = models.CharField(max_length=64)
     desc = models.TextField(max_length=248)
@@ -71,6 +75,12 @@ class Product(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     modified_at = models.DateTimeField(default=timezone.now)
     deleted_at = models.DateTimeField(blank=True)
+
+
+class ProductOptions(models.Model):
+    product_id = models.ForeignKey(Product, on_delete=models.PROTECT)
+    option_id = models.ForeignKey(Option, on_delete=models.PROTECT)
+
 
 # Shopping Process
 class ShoppingSession(models.Model):
@@ -99,7 +109,17 @@ class PaymentDetails(models.Model):
 class OrderDetails(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.PROTECT)
     total = models.FloatField()
+    tax = models.FloatField()
+    shipping_cost = models.FloatField()
     payment_id = models.OneToOneField(PaymentDetails, on_delete=models.CASCADE)
+    address_line1 = models.CharField(max_length=64)
+    address_line2 = models.CharField(max_length=64)
+    city = models.CharField(max_length=64)
+    postal_code = models.CharField(max_length=6)
+    country = models.CharField(max_length=64)
+    telephone = models.IntegerField()
+    tracking_no = models.CharField(max_length=40)
+    shipped = models.BooleanField()
     created_at = models.DateTimeField(default=timezone.now)
     modified_at = models.DateTimeField(default=timezone.now)
 
