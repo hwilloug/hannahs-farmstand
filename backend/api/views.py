@@ -1,3 +1,100 @@
-from django.shortcuts import render
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework import permissions
+from .models import User
+from .serializers import UserSerializer
 
-# Create your views here.
+class UserListApiView(APIView):
+    # add permission to check if user is authenticated
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        '''
+        List all the users
+        '''
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def post(self, request, *args, **kwargs):
+        '''
+        Create the User with given user data
+        '''
+        data = {
+            'username': request.data.get('username'), 
+            'password': request.data.get('password'), 
+            'first_name': request.data.get('first_name'),
+            'last_name': request.data.get('last_name'),
+            'telephone': request.data.get('telephone')
+        }
+        serializer = UserSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class UserDetailApiView(APIView):
+    def get_object(self, user_id):
+        '''
+        Helper method to get the object with given user_id
+        '''
+        try:
+            return User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            return None
+        
+    def get(self, request, user_id, *args, **kwargs):
+        '''
+        Retrieves the user with given user_id
+        '''
+        user_instance = self.get_object(user_id)
+        if not user_instance:
+            return Response(
+                {"res": "Object with user id does not exists"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        serializer = UserSerializer(user_instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def put(self, request, user_id, *args, **kwargs):
+        '''
+        Updates the user with given user_id if exists
+        '''
+        user_instance = self.get_object(user_id)
+        if not user_instance:
+            return Response(
+                {"res": "Object with user id does not exists"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        data = {
+            'username': request.data.get('username'), 
+            'password': request.data.get('password'), 
+            'first_name': request.data.get('first_name'),
+            'last_name': request.data.get('last_name'),
+            'telephone': request.data.get('telephone')
+        }
+        serializer = UserSerializer(instance = user_instance, data=data, partial = True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, user_id, *args, **kwargs):
+        '''
+        Deletes the user with given user_id if exists
+        '''
+        user_instance = self.get_object(user_id)
+        if not user_instance:
+            return Response(
+                {"res": "Object with user id does not exists"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        user_instance.delete()
+        return Response(
+            {"res": "Object deleted!"},
+            status=status.HTTP_200_OK
+        )
