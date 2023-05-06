@@ -1,9 +1,13 @@
 from django.contrib import admin
-from django import forms
-from .models import User, UserAddress
+from .models import User, UserAddress, UserPayment
 
 class UserAddressInline(admin.TabularInline):
     model = UserAddress
+
+
+class UserPaymentInline(admin.TabularInline):
+    model = UserPayment
+    
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
@@ -12,5 +16,6 @@ class UserAdmin(admin.ModelAdmin):
     search_fields = ("username__startswith", )
 
     inlines = [
-        UserAddressInline
+        UserAddressInline,
+        UserPaymentInline
     ]
