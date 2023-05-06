@@ -73,3 +73,40 @@ class Product(models.Model):
     deleted_at = models.DateTimeField(blank=True)
 
 # Shopping Process
+class ShoppingSession(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.PROTECT)
+    total = models.FloatField()
+    created_at = models.DateTimeField(default=timezone.now)
+    modified_at = models.DateTimeField(default=timezone.now)
+
+
+class CartItem(models.Model):
+    session_id = models.ForeignKey(ShoppingSession, on_delete=models.PROTECT)
+    product_id = models.ForeignKey(Product, on_delete=models.PROTECT)
+    quantity = models.IntegerField()
+    created_at = models.DateTimeField(default=timezone.now)
+    modified_at = models.DateTimeField(default=timezone.now)
+
+
+class PaymentDetails(models.Model):
+    amount = models.FloatField()
+    provider = models.CharField(max_length=24)
+    status = models.CharField(max_length=12)
+    created_at = models.DateTimeField(default=timezone.now)
+    modified_at = models.DateTimeField(default=timezone.now)
+
+
+class OrderDetails(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.PROTECT)
+    total = models.FloatField()
+    payment_id = models.OneToOneField(PaymentDetails, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(default=timezone.now)
+    modified_at = models.DateTimeField(default=timezone.now)
+
+
+class OrderItems(models.Model):
+    order_id = models.ForeignKey(OrderDetails, on_delete=models.CASCADE)
+    product_id = models.ForeignKey(Product, on_delete=models.PROTECT)
+    quantity = models.IntegerField()
+    created_at = models.DateTimeField(default=timezone.now)
+    modified_at = models.DateTimeField(default=timezone.now)
