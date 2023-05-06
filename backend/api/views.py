@@ -109,18 +109,18 @@ class UserAddressApiView(APIView):
         Helper method to get the object with given user_id
         '''
         try:
-            return User.objects.get(id=user_id)
+            return User.objects.filter(id=user_id)
         except User.DoesNotExist:
-            return None
+            return []
 
     def get_address_object(self, user_id):
         '''
         Helper method to get the object with given user_id
         '''
         try:
-            return UserAddress.objects.get(user_id=user_id)
+            return UserAddress.objects.filter(user_id=user_id)
         except UserAddress.DoesNotExist:
-            return None
+            return []
         
     def get(self, request, user_id, *args, **kwargs):
         '''
@@ -140,7 +140,7 @@ class UserAddressApiView(APIView):
                 status=status.HTTP_200_OK
             )
 
-        serializer = UserAddressSerializer(user_address_instance)
+        serializer = UserAddressSerializer(user_address_instance, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
@@ -172,9 +172,9 @@ class UserAddressDetailApiView(APIView):
         Helper method to get the object with given user_id
         '''
         try:
-            return User.objects.get(id=user_id)
+            return User.objects.filter(id=user_id)
         except User.DoesNotExist:
-            return None
+            return []
 
     def get_address_object(self, address_id, user_id):
         '''
