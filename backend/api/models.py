@@ -19,8 +19,9 @@ class User(models.Model):
 class UserAddress(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.PROTECT)
     address_line1 = models.CharField(max_length=64)
-    address_line2 = models.CharField(max_length=64)
+    address_line2 = models.CharField(max_length=64, blank=True)
     city = models.CharField(max_length=64)
+    state = models.CharField(max_length=2)
     postal_code = models.CharField(max_length=6)
     country = models.CharField(max_length=64)
     telephone = models.IntegerField()
