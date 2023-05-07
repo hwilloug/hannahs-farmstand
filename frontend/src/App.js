@@ -1,24 +1,26 @@
-import CssBaseline from '@mui/material/CssBaseline'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import LandingPage from './pages/LandingPage';
-import SignUpPage from './pages/SignUpPage';
+import { createSignUpPage } from './pages/SignUpPage';
+import NavBar from './components/NavBar';
+
+
+const SignUpPage = createSignUpPage()
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <LandingPage />
+  },
+  {
+    path: "/sign_up",
+    element: <SignUpPage />
+  }
+]);  
 
 function App() {
-
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <LandingPage />
-    },
-    {
-      path: "/sign_up",
-      element: <SignUpPage />
-    }
-  ]);  
-
   return (
     <div className="App">
-      <CssBaseline />
+      <NavBar />
       <RouterProvider router={router} />
     </div>
   );

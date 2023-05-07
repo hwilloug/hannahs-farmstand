@@ -8,7 +8,6 @@ class User(models.Model):
     password = models.CharField(max_length=248)
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
-    telephone = models.IntegerField()
     created_at = models.DateTimeField(default=timezone.now)
     modified_at = models.DateTimeField(default=timezone.now)
     

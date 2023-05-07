@@ -6,8 +6,6 @@ from .models import User, UserAddress, UserPayment
 from .serializers import UserSerializer, UserAddressSerializer, UserPaymentSerializer
 
 class UserListApiView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-
     def get(self, request, *args, **kwargs):
         '''
         List all the users
@@ -36,8 +34,6 @@ class UserListApiView(APIView):
     
 
 class UserDetailApiView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-
     def get_object(self, user_id):
         '''
         Helper method to get the object with given user_id
@@ -102,8 +98,6 @@ class UserDetailApiView(APIView):
     
 
 class UserAddressApiView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-
     def get_object(self, user_id):
         '''
         Helper method to get the object with given user_id
@@ -165,8 +159,6 @@ class UserAddressApiView(APIView):
 
 
 class UserAddressDetailApiView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-
     def get_object(self, user_id):
         '''
         Helper method to get the object with given user_id
@@ -257,8 +249,6 @@ class UserAddressDetailApiView(APIView):
     
 
 class UserPaymentApiView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-
     def get_object(self, user_id):
         '''
         Helper method to get the object with given user_id
@@ -318,8 +308,6 @@ class UserPaymentApiView(APIView):
 
 
 class UserPaymentDetailApiView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-
     def get_object(self, user_id):
         '''
         Helper method to get the object with given user_id
