@@ -1,11 +1,13 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { createLandingPage } from './pages/LandingPage';
 import { createSignUpPage } from './pages/SignUpPage';
+import { createProductPage } from './pages/ProductPage';
 import NavBar from './components/NavBar';
 
 
 const SignUpPage = createSignUpPage()
 const LandingPage = createLandingPage()
+const ProductPage = createProductPage()
 
 const router = createBrowserRouter([
   {
@@ -15,6 +17,10 @@ const router = createBrowserRouter([
   {
     path: "/sign_up",
     element: <SignUpPage />
+  },
+  {
+    path: "products/:productId",
+    element: <ProductPage />
   }
 ]);  
 

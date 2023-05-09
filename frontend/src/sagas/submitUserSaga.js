@@ -4,7 +4,7 @@ export function createSubmitUserSaga(apiServices) {
     return function* submitUserSaga(action) {
         const {firstName, lastName, username, password} = action.payload.userInformation
         try {
-            const response = yield call(
+            yield call(
                 apiServices.submitUserApi,
                 {
                     first_name: firstName,

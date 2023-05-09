@@ -11,6 +11,14 @@ export function productsReducer(
                 ...state,
                 allProducts: action.payload.products
             }
+        case '[product] set product':
+            return {
+                ...state,
+                productDetail: {
+                    ...state.productDetail,
+                    [action.payload.productId]: action.payload.productDetail
+                }
+            }
         default: 
             return state
     }

@@ -6,14 +6,13 @@ import { connectRedux } from "../utils/connect";
 export default function LandingPage({state, actions, props}) {
 
     useEffect(() => {
-        console.log(state, actions, props)
         actions.getProducts()
-    }, [])
+    }, [actions])
 
     return (
         <Container sx={{ p: '50px', display: 'flex', flexWrap: 'wrap' }}>
             {state.products.allProducts && state.products.allProducts.map((product) => (
-                <Link href={`/products/${product.id}/`} sx={{textDecoration: 'none'}}>
+                <Link href={`/products/${product.id}/`} sx={{textDecoration: 'none'}} key={product.id}>
                     <Card sx={{ minWidth: 325, m: '20px' }}>
                         <CardMedia
                             sx={{ height: 240 }}

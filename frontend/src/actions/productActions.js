@@ -4,11 +4,11 @@ export const productActions = (dispatch) => {
   return {
     getProducts: () => 
       dispatch(createAction('[product] get products', {})),
-    getProduct: (product_id) =>
-      dispatch(createAction('[product] get product'), {product_id}),
+    getProduct: (productId) =>
+      dispatch(createAction('[product] get product', {productId})),
     setProducts: (products) =>
       dispatch(createAction('[product] set products', {products})),
-    setProduct: (product) =>
-      dispatch(createAction('[product] set product', {product})),
+    setProduct: (productId, productDetail) =>
+      dispatch(createAction('[product] set product', {productId, productDetail})),
   }
 }
