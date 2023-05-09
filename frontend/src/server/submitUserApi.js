@@ -2,8 +2,6 @@ import axios from 'axios'
 import { getCookie } from '../utils/getCookie'
 
 export function createSubmitUserApi() {
-
-    console.log(getCookie('csrftoken'))
     return async function service(data) {
       try {
         const result = await axios({
@@ -14,7 +12,6 @@ export function createSubmitUserApi() {
             },
             data
         })
-        console.log(result)
         return result.data
       } catch (e) {
         console.log(e)

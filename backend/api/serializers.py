@@ -1,20 +1,49 @@
 from rest_framework import serializers
-from .models import User, UserAddress, UserPayment
+from .models import User, UserAddress, UserPayment, Product, ProductCategory, ProductDiscount, Option, ProductInventory
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'created_at', 'modified_at']
+        fields = ['id', 'username', 'first_name', 'last_name', 'password', 'created_at', 'modified_at']
 
 
 class UserAddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserAddress
-        fields = ['address_line1', 'address_line2', 'city', 'postal_code', 'country', 'telephone']
+        fields = ['id', 'address_line1', 'address_line2', 'city', 'state', 'postal_code', 'country', 'telephone']
 
 
 class UserPaymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserPayment
-        fields = ['payment_type', 'provider', 'account_no', 'expiry']
+        fields = ['id', 'payment_type', 'provider', 'account_no', 'expiry']
+
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['id', 'name', 'desc', 'img1', 'img2', 'sku', 'category_id', 'price', 'discount_id', 'created_at', 'modified_at', 'deleted_at']
+
+
+class ProductCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductCategory
+        fields = ['id', 'name', 'desc', 'created_at', 'modified_at', 'deleted_at']
+
+
+class ProductDiscountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductDiscount
+        fields = ['id', 'name', 'desc', 'discount_percent', 'active', 'created_at', 'modified_at', 'deleted_at']
+
+
+class OptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Option
+        fields = ['id', 'name', 'created_at', 'modified_at', 'deleted_at']
+
+
+class ProductInventorySerializer(serializers.ModelSerializer):
+    class Meta: 
+        model = ProductInventory
+        fields = ['id', 'quantity', 'product_id', 'created_at', 'modified_at', 'deleted_at']

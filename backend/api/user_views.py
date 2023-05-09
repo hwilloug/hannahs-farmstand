@@ -50,7 +50,7 @@ class UserDetailApiView(APIView):
         user_instance = self.get_object(user_id)
         if not user_instance:
             return Response(
-                {"res": "Object with user id does not exists"},
+                {"res": "Object with user id does not exist"},
                 status=status.HTTP_400_BAD_REQUEST
             )
 

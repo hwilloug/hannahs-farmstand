@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils import timezone
-import datetime
 
 # User Management
 class User(models.Model):
@@ -18,7 +17,7 @@ class User(models.Model):
 class UserAddress(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.PROTECT)
     address_line1 = models.CharField(max_length=64)
-    address_line2 = models.CharField(max_length=64, blank=True)
+    address_line2 = models.CharField(max_length=64, null=True, blank=True)
     city = models.CharField(max_length=64)
     state = models.CharField(max_length=2)
     postal_code = models.CharField(max_length=6)
@@ -40,14 +39,10 @@ class ProductCategory(models.Model):
     desc = models.TextField(max_length=248)
     created_at = models.DateTimeField(default=timezone.now)
     modified_at = models.DateTimeField(default=timezone.now)
-    deleted_at = models.DateTimeField(blank=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
 
-
-class ProductInventory(models.Model):
-    quantity = models.IntegerField()
-    created_at = models.DateTimeField(default=timezone.now)
-    modified_at = models.DateTimeField(default=timezone.now)
-    deleted_at = models.DateTimeField(blank=True)
+    def __str__(self):
+        return self.name
 
 
 class ProductDiscount(models.Model):
@@ -57,27 +52,51 @@ class ProductDiscount(models.Model):
     active = models.BooleanField()
     created_at = models.DateTimeField(default=timezone.now)
     modified_at = models.DateTimeField(default=timezone.now)
-    deleted_at = models.DateTimeField(blank=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.discount_percent}%"
 
 
 class Option(models.Model):
-    name: models.CharField(max_length=64)
+    name = models.CharField(max_length=64)
+    created_at = models.DateTimeField(default=timezone.now)
+    modified_at = models.DateTimeField(default=timezone.now)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Product(models.Model):
     name = models.CharField(max_length=64)
     desc = models.TextField(max_length=248)
+    img1 = models.URLField(null=True, blank=True)
+    img2 = models.URLField(null=True, blank=True)
     sku = models.CharField(max_length=64)
     category_id = models.ForeignKey(ProductCategory, on_delete=models.PROTECT)
-    inventory_id = models.OneToOneField(ProductInventory, on_delete=models.CASCADE)
     price = models.FloatField()
-    discount_id = models.ForeignKey(ProductDiscount, on_delete=models.PROTECT)
+    discount_id = models.ForeignKey(ProductDiscount, on_delete=models.PROTECT, null=True, blank=True)
     created_at = models.DateTimeField(default=timezone.now)
     modified_at = models.DateTimeField(default=timezone.now)
-    deleted_at = models.DateTimeField(blank=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return self.name
 
 
-class ProductOptions(models.Model):
+class ProductInventory(models.Model):
+    quantity = models.IntegerField()
+    product_id = models.OneToOneField(Product, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(default=timezone.now)
+    modified_at = models.DateTimeField(default=timezone.now)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.quantity}"
+
+
+class ProductOption(models.Model):
     product_id = models.ForeignKey(Product, on_delete=models.PROTECT)
     option_id = models.ForeignKey(Option, on_delete=models.PROTECT)
 
