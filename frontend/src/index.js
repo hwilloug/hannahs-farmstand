@@ -17,7 +17,6 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 // Create the saga middleware
 const sagaMiddleware = createSagaMiddleware()
 const apiServices = createAPIServices()
-const rootSaga = createRootSaga(apiServices)
 const middleware = [sagaMiddleware]
 const reducer = createReducer()
 // Mount it on the Store
@@ -26,6 +25,8 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(middleware),
 })
+
+const rootSaga = createRootSaga(apiServices, store)
 
 sagaMiddleware.run(rootSaga)
 

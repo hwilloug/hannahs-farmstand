@@ -1,10 +1,11 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import LandingPage from './pages/LandingPage';
+import { createLandingPage } from './pages/LandingPage';
 import { createSignUpPage } from './pages/SignUpPage';
 import NavBar from './components/NavBar';
 
 
 const SignUpPage = createSignUpPage()
+const LandingPage = createLandingPage()
 
 const router = createBrowserRouter([
   {
