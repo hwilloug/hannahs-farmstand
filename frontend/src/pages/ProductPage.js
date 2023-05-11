@@ -1,5 +1,5 @@
-import { Container, Typography } from "@mui/material";
-import { useEffect } from "react";
+import { Button, Container, Input, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 import { productActions } from '../actions/productActions'
 import { connectRedux } from "../utils/connect";
 import { useParams } from "react-router-dom";
@@ -11,6 +11,15 @@ export default function ProductPage({state, actions, props}) {
     let productDetail = {}
     if (state.products.productDetail) {
         productDetail = state.products.productDetail[productId]
+    }
+
+    let [quantity, setQuantity] = useState(1)
+
+    const onQuantityChange = (event) => {
+        const q = event.target.value
+        if (q > 0 && q <= productDetail.quantity ) {
+            setQuantity(event.target.value)
+        }
     }
 
     useEffect(() => {
@@ -33,11 +42,19 @@ export default function ProductPage({state, actions, props}) {
                         ${(productDetail.price - productDetail.discount.discount_percent/100 * productDetail.price).toFixed(2)}
                     </Typography>
                 }
-                {productDetail.quantity < 10 && 
+                {productDetail.quantity < 10 ? 
                     <Typography sx={{ fontStyle: 'italic' }}>
-                        Only {productDetail.quantity} left!
+                        Only {productDetail.quantity} left in stock!
+                    </Typography>
+                    : <Typography>
+                        {productDetail.quantity} left in stock.
                     </Typography>
                 }
+                <Input 
+                    type='number' 
+                    value={quantity}
+                    onChange={onQuantityChange}
+                /><Button variant='contained'>Add to cart</Button>
             </Container>
         </Container>
     )
