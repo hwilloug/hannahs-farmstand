@@ -4,32 +4,10 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import CssBaseline from '@mui/material/CssBaseline'
-import { Provider } from 'react-redux'
-import { configureStore } from '@reduxjs/toolkit'
-import createSagaMiddleware from 'redux-saga'
-import { createRootSaga } from './sagas';
-import { createAPIServices } from './server';
-import { createReducer } from './reducers';
 import { Auth0Provider } from "@auth0/auth0-react";
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-
-// Create the saga middleware
-const sagaMiddleware = createSagaMiddleware()
-const apiServices = createAPIServices()
-const middleware = [sagaMiddleware]
-const reducer = createReducer()
-// Mount it on the Store
-const store = configureStore({
-  reducer,
-  middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(middleware),
-})
-
-const rootSaga = createRootSaga(apiServices, store)
-
-sagaMiddleware.run(rootSaga)
 
 root.render(
   <React.StrictMode>
@@ -40,10 +18,8 @@ root.render(
         redirect_uri: window.location.origin
       }}
     >
-      <Provider store={store}>
-        <CssBaseline />
-        <App />
-      </Provider>
+      <CssBaseline />
+      <App />
     </Auth0Provider>
   </React.StrictMode>
 );

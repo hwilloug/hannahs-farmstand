@@ -1,17 +1,23 @@
 import { Card, CardContent, Container, CardMedia, Typography, Link } from "@mui/material";
-import { useEffect } from "react";
-import { productActions } from '../actions/productActions'
-import { connectRedux } from "../utils/connect";
+import { useEffect, useState } from "react";
+import axios from 'axios'
 
-export default function LandingPage({state, actions, props}) {
+export default function LandingPage() {
+
+    const [products, setProducts] = useState([])
+
+    const getProducts = async () => {
+        const result = await axios.get('/api/products')
+        setProducts(result.data)
+    }
 
     useEffect(() => {
-        actions.getProducts()
-    }, [actions])
+        getProducts()
+    }, [])
 
     return (
         <Container sx={{ p: '50px', display: 'flex', flexWrap: 'wrap' }}>
-            {state.products.allProducts && state.products.allProducts.map((product) => (
+            {products.map((product) => (
                 <Link href={`/products/${product.id}/`} sx={{textDecoration: 'none'}} key={product.id}>
                     <Card sx={{ minWidth: 325, m: '20px' }}>
                         <CardMedia
@@ -43,11 +49,3 @@ export default function LandingPage({state, actions, props}) {
         </Container>
     )
 }
-
-export function createLandingPage() {
-    return connectRedux(
-      LandingPage,
-      (state) => state,
-      productActions
-    )
-  }

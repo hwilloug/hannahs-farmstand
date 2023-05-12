@@ -1,19 +1,14 @@
 import { Button, Container, Input, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { productActions } from '../actions/productActions'
-import { connectRedux } from "../utils/connect";
 import { useParams } from "react-router-dom";
 import { Image } from 'mui-image'
+import axios from 'axios'
 
-export default function ProductPage({state, actions, props}) {
+export default function ProductPage() {
 
     let { productId } = useParams()
-    let productDetail = {}
-    if (state.products.productDetail) {
-        productDetail = state.products.productDetail[productId]
-    }
-
-    let [quantity, setQuantity] = useState(1)
+    const [productDetail, setProductDetail] = useState({})  
+    const [quantity, setQuantity] = useState(1)
 
     const onQuantityChange = (event) => {
         const q = event.target.value
@@ -22,9 +17,14 @@ export default function ProductPage({state, actions, props}) {
         }
     }
 
+    const getProductDetail = async (productId) => {
+        const result = await axios(`/api/products/${productId}`)
+        setProductDetail(result.data)
+    }
+
     useEffect(() => {
-        actions.getProduct(productId)
-    }, [actions, productId])
+        getProductDetail(productId)
+    }, [productId])
 
     return (
         <Container sx={{ p: '50px', display: 'flex' }}>
@@ -59,11 +59,3 @@ export default function ProductPage({state, actions, props}) {
         </Container>
     )
 }
-
-export function createProductPage() {
-    return connectRedux(
-      ProductPage,
-      (state) => state,
-      productActions
-    )
-  }
