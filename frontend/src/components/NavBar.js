@@ -11,6 +11,9 @@ import IconButton from '@mui/material/IconButton'
 import AdbIcon from '@mui/icons-material/Adb'
 import Button from '@mui/material/Button'
 import Link from '@mui/material/Link'
+import LoginButton from './LoginButton'
+import LogoutButton from './LogoutButton'
+import Profile from './Profile'
 
 export default function NavBar() {
 
@@ -119,6 +122,11 @@ export default function NavBar() {
                   {page.name}
                 </Button>
               ))}
+            </Box>
+            <Box>
+              <Profile />
+              <LoginButton />
+              <LogoutButton />
             </Box>
           </Toolbar>
         </Container>

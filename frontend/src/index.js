@@ -10,6 +10,7 @@ import createSagaMiddleware from 'redux-saga'
 import { createRootSaga } from './sagas';
 import { createAPIServices } from './server';
 import { createReducer } from './reducers';
+import { Auth0Provider } from "@auth0/auth0-react";
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -32,10 +33,18 @@ sagaMiddleware.run(rootSaga)
 
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <CssBaseline />
-      <App />
-    </Provider>
+    <Auth0Provider
+      domain={process.env.REACT_APP_AUTH0_DOMAIN}
+      clientId={process.env.REACT_APP_AUTH0_CLIENT_ID}
+      authorizationParams={{
+        redirect_uri: window.location.origin
+      }}
+    >
+      <Provider store={store}>
+        <CssBaseline />
+        <App />
+      </Provider>
+    </Auth0Provider>
   </React.StrictMode>
 );
 
