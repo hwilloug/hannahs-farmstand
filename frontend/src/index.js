@@ -1,13 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import './index.css'
+import App from './App'
+import reportWebVitals from './reportWebVitals'
 import CssBaseline from '@mui/material/CssBaseline'
-import { Auth0Provider } from "@auth0/auth0-react";
+import { Auth0Provider } from "@auth0/auth0-react"
+import { Elements } from '@stripe/react-stripe-js'
+import { loadStripe } from '@stripe/stripe-js'
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+const stripePromise = loadStripe('pk_test_51N72XUJIv5MHSkRBaAkGOGc8cJLctl6AA13iIm2EVgnrV8YEi15cUyBVsf7bzAtu4rJkT6XaSxkWV8EdJKHy6sYp00gAAX1mIs')
+const options = {}
 
 root.render(
   <React.StrictMode>
@@ -18,8 +23,10 @@ root.render(
         redirect_uri: window.location.origin
       }}
     >
-      <CssBaseline />
-      <App />
+      <Elements stripe={stripePromise} options={options}>
+        <CssBaseline />
+        <App />
+      </Elements>
     </Auth0Provider>
   </React.StrictMode>
 );
