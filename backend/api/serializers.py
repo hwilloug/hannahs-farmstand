@@ -1,11 +1,11 @@
 from rest_framework import serializers
-from .models import User, UserAddress, UserPayment, Product, ProductCategory, ProductDiscount, Option, ProductInventory
+from .models import User, UserAddress, Product, ProductCategory, ProductDiscount, Option, ProductInventory
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'password', 'created_at', 'modified_at']
+        fields = ['id', 'username', 'first_name', 'last_name', 'created_at', 'modified_at']
 
 
 class UserAddressSerializer(serializers.ModelSerializer):
@@ -13,11 +13,6 @@ class UserAddressSerializer(serializers.ModelSerializer):
         model = UserAddress
         fields = ['id', 'address_line1', 'address_line2', 'city', 'state', 'postal_code', 'country', 'telephone']
 
-
-class UserPaymentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserPayment
-        fields = ['id', 'payment_type', 'provider', 'account_no', 'expiry']
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:

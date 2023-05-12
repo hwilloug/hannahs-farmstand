@@ -1,12 +1,8 @@
 from django.contrib import admin
-from .models import User, UserAddress, UserPayment, Product, ProductCategory, ProductInventory, ProductDiscount, ProductOption, Option
+from .models import User, UserAddress, Product, ProductCategory, ProductInventory, ProductDiscount, ProductOption, Option
 
 class UserAddressInline(admin.TabularInline):
     model = UserAddress
-
-
-class UserPaymentInline(admin.TabularInline):
-    model = UserPayment
     
 
 @admin.register(User)
@@ -16,8 +12,7 @@ class UserAdmin(admin.ModelAdmin):
     search_fields = ("username__startswith", )
 
     inlines = [
-        UserAddressInline,
-        UserPaymentInline
+        UserAddressInline
     ]
 
 class ProductInventoryInline(admin.TabularInline):

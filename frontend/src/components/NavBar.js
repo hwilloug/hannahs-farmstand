@@ -12,10 +12,10 @@ import AdbIcon from '@mui/icons-material/Adb'
 import Button from '@mui/material/Button'
 import Link from '@mui/material/Link'
 import LoginButton from './LoginButton'
-import LogoutButton from './LogoutButton'
 import Profile from './Profile'
+import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 
-export default function NavBar() {
+export default function NavBar({user}) {
 
   const pageName = "Hannah's Farmstand"
 
@@ -124,9 +124,11 @@ export default function NavBar() {
               ))}
             </Box>
             <Box>
-              <Profile />
+              <Profile user={user} />
               <LoginButton />
-              <LogoutButton />
+            </Box>
+            <Box sx={{ml: '20px'}}>
+              <ShoppingBasketIcon />
             </Box>
           </Toolbar>
         </Container>

@@ -4,9 +4,8 @@ from django.utils import timezone
 # User Management
 class User(models.Model):
     username = models.CharField(max_length=248)
-    password = models.CharField(max_length=248)
-    first_name = models.CharField(max_length=64)
-    last_name = models.CharField(max_length=64)
+    first_name = models.CharField(max_length=64, blank=True, null=True)
+    last_name = models.CharField(max_length=64, blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now)
     modified_at = models.DateTimeField(default=timezone.now)
     
@@ -23,14 +22,6 @@ class UserAddress(models.Model):
     postal_code = models.CharField(max_length=6)
     country = models.CharField(max_length=64)
     telephone = models.IntegerField()
-
-
-class UserPayment(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.PROTECT)
-    payment_type = models.CharField(max_length=4)
-    provider = models.CharField(max_length=64)
-    account_no = models.IntegerField()
-    expiry = models.DateField()
 
 
 # Product Management

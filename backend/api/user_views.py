@@ -2,8 +2,29 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import permissions
-from .models import User, UserAddress, UserPayment
-from .serializers import UserSerializer, UserAddressSerializer, UserPaymentSerializer
+from .models import User, UserAddress
+from .serializers import UserSerializer, UserAddressSerializer
+
+
+class WhoAmIView(APIView):
+    def post(self, request, *args, **kwargs):
+        '''
+        Syncs Auth0 user data with database
+        '''
+        user = User.objects.filter(username=request.data.get('username'))
+        if user:
+            serializer = UserSerializer(user[0])
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+        else:
+            data = {
+                'username': request.data.get('username')
+            }
+            serializer = UserSerializer(data=data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return
+
 
 class UserListApiView(APIView):
     def get(self, request, *args, **kwargs):
@@ -20,10 +41,8 @@ class UserListApiView(APIView):
         '''
         data = {
             'username': request.data.get('username'), 
-            'password': request.data.get('password'), 
             'first_name': request.data.get('first_name'),
-            'last_name': request.data.get('last_name'),
-            'telephone': request.data.get('telephone')
+            'last_name': request.data.get('last_name')
         }
         serializer = UserSerializer(data=data)
         if serializer.is_valid():
@@ -68,11 +87,9 @@ class UserDetailApiView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
         data = {
-            'username': request.data.get('username'), 
-            'password': request.data.get('password'), 
+            'username': request.data.get('username'),
             'first_name': request.data.get('first_name'),
-            'last_name': request.data.get('last_name'),
-            'telephone': request.data.get('telephone')
+            'last_name': request.data.get('last_name')
         }
         serializer = UserSerializer(instance=user_instance, data=data, partial=True)
         if serializer.is_valid():
@@ -242,153 +259,6 @@ class UserAddressDetailApiView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
         user_address_instance.delete()
-        return Response(
-            {"res": "Object deleted!"},
-            status=status.HTTP_200_OK
-        )
-    
-
-class UserPaymentApiView(APIView):
-    def get_object(self, user_id):
-        '''
-        Helper method to get the object with given user_id
-        '''
-        try:
-            return User.objects.filter(id=user_id)
-        except User.DoesNotExist:
-            return []
-
-    def get_payment_objects(self, user_id):
-        '''
-        Helper method to get the object with given user_id
-        '''
-        try:
-            return UserPayment.objects.filter(user_id=user_id)
-        except UserPayment.DoesNotExist:
-            return []
-        
-    def get(self, request, user_id, *args, **kwargs):
-        '''
-        Retrieves the user address with given user_id
-        '''
-        user_instance = self.get_object(user_id)
-        if not user_instance:
-            return Response(
-                'Object with id does not exist',
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
-        user_payment_instance = self.get_payment_objects(user_id)
-        if not user_payment_instance:
-            return Response(
-                [],
-                status=status.HTTP_200_OK
-            )
-
-        serializer = UserPaymentSerializer(user_payment_instance, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def post(self, request, *args, **kwargs):
-        '''
-        Create the User Payment with given payment data
-        '''
-        data = {
-            'user_id': request.data.get('user_id'), 
-            'payment_type': request.data.get('payment_type'), 
-            'provider': request.data.get('provider'),
-            'account_no': request.data.get('account_no'),
-            'expiry': request.data.get('expiry')
-        }
-        serializer = UserPaymentSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class UserPaymentDetailApiView(APIView):
-    def get_object(self, user_id):
-        '''
-        Helper method to get the object with given user_id
-        '''
-        try:
-            return User.objects.filter(id=user_id)
-        except User.DoesNotExist:
-            return []
-
-    def get_payment_object(self, payment_id, user_id):
-        '''
-        Helper method to get the object with given user_id
-        '''
-        try:
-            return UserAddress.objects.get(user_id=user_id, id=payment_id)
-        except UserAddress.DoesNotExist:
-            return None
-        
-    def get(self, request, user_id, payment_id, *args, **kwargs):
-        '''
-        Retrieves the user payment with given user_id
-        '''
-        user_instance = self.get_object(user_id)
-        if not user_instance:
-            return Response(
-                'Object with id does not exist',
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
-        user_payment_instance = self.get_payment_object(payment_id, user_id)
-        if not user_payment_instance:
-            return Response(
-                'Object with id does not exist',
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        serializer = UserPaymentSerializer(user_payment_instance)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def put(self, request, user_id, payment_id, *args, **kwargs):
-        '''
-        Updates the user payment with given user_id if exists
-        '''
-        user_instance = self.get_object(user_id)
-        if not user_instance:
-            return Response(
-                {"res": "Object with user id does not exists"}, 
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
-        user_payment_instance = self.get_payment_object(payment_id, user_id)
-        if not user_payment_instance:
-            return Response(
-                {"res": "Object with user id does not exists"}, 
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
-        data = {
-            'user_id': request.data.get('user_id'), 
-            'payment_type': request.data.get('payment_type'), 
-            'provider': request.data.get('provider'),
-            'account_no': request.data.get('account_no'),
-            'expiry': request.data.get('expiry')
-        }
-        serializer = UserAddressSerializer(instance=user_payment_instance, data=data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, user_id, payment_id, *args, **kwargs):
-        '''
-        Deletes the user with given user_id if exists
-        '''
-        user_payment_instance = self.get_payment_object(payment_id, user_id)
-        if not user_payment_instance:
-            return Response(
-                {"res": "Object with user id does not exists"}, 
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        user_payment_instance.delete()
         return Response(
             {"res": "Object deleted!"},
             status=status.HTTP_200_OK
