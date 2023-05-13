@@ -27,13 +27,12 @@ export default function ProductPage() {
     }, [productId])
 
     return (
-        <Container sx={{ p: '50px', m: '50px', display: 'flex', backgroundColor: 'white' }}>
+        <Container sx={{ p: '50px', mx: 'auto', my: '50px', display: 'flex', backgroundColor: 'white', minHeight: '80vh' }}>
             <Container>
                 <Image src={productDetail.img1} sx={{border: '1px solid black'}} />
             </Container>
             <Container>
                 <Typography variant='h4' sx={{mb: '20px'}}>{productDetail.name}</Typography>
-                <Typography variant='h6'>Product Detail</Typography>
                 <Typography>{productDetail.desc}</Typography>
                 <Container disableGutters sx={{display: 'flex', gap: '10px', my: '20px'}}>
                     <Typography sx={productDetail.discount && {textDecoration: 'line-through'}}>
@@ -47,19 +46,20 @@ export default function ProductPage() {
                 </Container>
                 {productDetail.quantity < 10 ? 
                     <Typography sx={{ fontStyle: 'italic' }}>
-                        Only {productDetail.quantity} left in stock!
+                        Only {productDetail.quantity} {productDetail.sku} left in stock!
                     </Typography>
                     : <Typography>
-                        {productDetail.quantity} left in stock.
+                        {productDetail.quantity} {productDetail.sku} left in stock.
                     </Typography>
                 }
-                <Container disableGutters sx={{mt: '20px'}}>
+                <Container disableGutters sx={{mt: '40px'}} sx={{display: 'flex', alignItems: 'center'}}>
                     <Input 
                         type='number' 
                         value={quantity}
                         onChange={onQuantityChange}
-                    /><Button variant='contained' color='secondary'>Add to cart</Button>
+                    /><Typography sx={{ml: '10px'}}>{productDetail.sku}</Typography>
                 </Container>
+                <Button variant='contained' color='secondary' sx={{mt: '20px'}}>Add to cart</Button>
             </Container>
         </Container>
     )

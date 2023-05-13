@@ -8,6 +8,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import axios from 'axios'
 import UserPage from './pages/UserPage';
 import './App.css'
+import Footer from './components/Footer';
 
 function App() {
 
@@ -54,6 +55,7 @@ function App() {
     <div id="App">
       <NavBar user={userDetail} />
       <RouterProvider router={router} />
+      <Footer />
     </div>
   );
 }

@@ -35,15 +35,16 @@ export default function UserEditAccountPage({user}) {
         )
     } else if (mode === 'edit') {
         return (
-            <Container>
+            <Container sx={{display: 'flex', flexDirection: 'column', gap: '20px', width: '20rem'}}>
                 <FormControl>
                     <InputLabel>First Name</InputLabel><Input value={firstName} onChange={(e) => setFirstName(e.target.value)} />
-                </FormControl><br /><br />
+                </FormControl>
                 <FormControl>
                     <InputLabel>Last Name</InputLabel><Input value={lastName} onChange={(e) => setLastName(e.target.value)} />
-                </FormControl><br />
+                </FormControl>
                 <FormControl sx={{mt: '10px'}}>
                     <Button variant='contained' onClick={handleNameSave}>Save</Button>
+                    <Button sx={{mt: '10px'}} onClick={() => setMode('read')}>Cancel</Button>
                 </FormControl>
             </Container>
         )
