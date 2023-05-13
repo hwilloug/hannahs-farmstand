@@ -27,21 +27,24 @@ export default function ProductPage() {
     }, [productId])
 
     return (
-        <Container sx={{ p: '50px', display: 'flex' }}>
+        <Container sx={{ p: '50px', m: '50px', display: 'flex', backgroundColor: 'white' }}>
             <Container>
-                <Image src={productDetail.img1} />
+                <Image src={productDetail.img1} sx={{border: '1px solid black'}} />
             </Container>
             <Container>
-                <Typography variant='h4'>{productDetail.name}</Typography>
+                <Typography variant='h4' sx={{mb: '20px'}}>{productDetail.name}</Typography>
+                <Typography variant='h6'>Product Detail</Typography>
                 <Typography>{productDetail.desc}</Typography>
-                <Typography sx={productDetail.discount && {textDecoration: 'line-through'}}>
-                    ${productDetail.price && productDetail.price.toFixed(2)}
-                </Typography>
-                {productDetail.discount && 
-                    <Typography color='red'>
-                        ${(productDetail.price - productDetail.discount.discount_percent/100 * productDetail.price).toFixed(2)}
+                <Container disableGutters sx={{display: 'flex', gap: '10px', my: '20px'}}>
+                    <Typography sx={productDetail.discount && {textDecoration: 'line-through'}}>
+                        ${productDetail.price && productDetail.price.toFixed(2)}
                     </Typography>
-                }
+                    {productDetail.discount && 
+                        <Typography color='red'>
+                            ${(productDetail.price - productDetail.discount.discount_percent/100 * productDetail.price).toFixed(2)}
+                        </Typography>
+                    }
+                </Container>
                 {productDetail.quantity < 10 ? 
                     <Typography sx={{ fontStyle: 'italic' }}>
                         Only {productDetail.quantity} left in stock!
@@ -50,11 +53,13 @@ export default function ProductPage() {
                         {productDetail.quantity} left in stock.
                     </Typography>
                 }
-                <Input 
-                    type='number' 
-                    value={quantity}
-                    onChange={onQuantityChange}
-                /><Button variant='contained'>Add to cart</Button>
+                <Container disableGutters sx={{mt: '20px'}}>
+                    <Input 
+                        type='number' 
+                        value={quantity}
+                        onChange={onQuantityChange}
+                    /><Button variant='contained' color='secondary'>Add to cart</Button>
+                </Container>
             </Container>
         </Container>
     )

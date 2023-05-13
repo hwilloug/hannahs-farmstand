@@ -7,12 +7,24 @@ import CssBaseline from '@mui/material/CssBaseline'
 import { Auth0Provider } from "@auth0/auth0-react"
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
+import { ThemeProvider, createTheme } from '@mui/material'
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 const stripePromise = loadStripe('pk_test_51N72XUJIv5MHSkRBaAkGOGc8cJLctl6AA13iIm2EVgnrV8YEi15cUyBVsf7bzAtu4rJkT6XaSxkWV8EdJKHy6sYp00gAAX1mIs')
 const options = {}
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#7F957C'
+    },
+    secondary: {
+      main: '#995C75'
+    }
+  }
+})
 
 root.render(
   <React.StrictMode>
@@ -24,8 +36,10 @@ root.render(
       }}
     >
       <Elements stripe={stripePromise} options={options}>
-        <CssBaseline />
-        <App />
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <App />
+        </ThemeProvider>
       </Elements>
     </Auth0Provider>
   </React.StrictMode>

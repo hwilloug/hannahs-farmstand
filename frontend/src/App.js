@@ -7,6 +7,7 @@ import {useEffect, useState} from 'react'
 import { useAuth0 } from '@auth0/auth0-react';
 import axios from 'axios'
 import UserPage from './pages/UserPage';
+import './App.css'
 
 function App() {
 
@@ -50,7 +51,7 @@ function App() {
   }, [user])
 
   return (
-    <div className="App">
+    <div id="App">
       <NavBar user={userDetail} />
       <RouterProvider router={router} />
     </div>

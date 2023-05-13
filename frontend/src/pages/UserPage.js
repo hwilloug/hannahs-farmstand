@@ -40,9 +40,9 @@ function UserPage({user}) {
     }
 
     return (
-        <Container sx={{p: '50px'}}>
+        <Container sx={{p: '50px', backgroundColor: 'white', m: '50px'}}>
             <Typography variant="h5" sx={{mb: '25px'}}>Hi, {user.first_name ? user.first_name : user.username}!</Typography>
-            <Tabs value={tab} onChange={handleTabChange}>
+            <Tabs value={tab} onChange={handleTabChange} textColor="secondary" indicatorColor="secondary">
                 <Tab label="my account" />
                 <Tab label="my addresses" />
                 <Tab label="my orders" />
