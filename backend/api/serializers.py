@@ -11,7 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
 class UserAddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserAddress
-        fields = ['id', 'address_line1', 'address_line2', 'city', 'state', 'postal_code', 'country', 'telephone']
+        fields = ['id', 'recipient_name', 'address_line1', 'address_line2', 'city', 'state', 'postal_code', 'country', 'telephone', 'user_id']
 
 
 class ProductSerializer(serializers.ModelSerializer):

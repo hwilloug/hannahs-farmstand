@@ -159,10 +159,12 @@ class UserAddressApiView(APIView):
         Create the User Address with given address data
         '''
         data = {
+            'recipient_name': request.data.get('recipient_name'),
             'user_id': request.data.get('user_id'), 
             'address_line1': request.data.get('address_line1'), 
             'address_line2': request.data.get('address_line2'),
             'city': request.data.get('city'),
+            'state': request.data.get('state'),
             'postal_code': request.data.get('postal_code'),
             'country': request.data.get('country'),
             'telephone': request.data.get('telephone'),
@@ -234,6 +236,7 @@ class UserAddressDetailApiView(APIView):
             )
         
         data = {
+            'recipient_name': request.data.get('recipient_name'),
             'user_id': request.data.get('user_id'), 
             'address_line1': request.data.get('address_line1'), 
             'address_line2': request.data.get('address_line2'),

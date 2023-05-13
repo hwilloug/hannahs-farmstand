@@ -15,6 +15,7 @@ class User(models.Model):
 
 class UserAddress(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.PROTECT)
+    recipient_name = models.CharField(max_length=64)
     address_line1 = models.CharField(max_length=64)
     address_line2 = models.CharField(max_length=64, null=True, blank=True)
     city = models.CharField(max_length=64)

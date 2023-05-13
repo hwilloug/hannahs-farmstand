@@ -10,7 +10,7 @@ export default function UserEditAccountPage({user}) {
     const [lastName, setLastName] = useState(user.last_name)
 
     const handleNameSave = async () => {
-        const response = await axios({
+        await axios({
             url: `/api/users/${user.id}/`,
             method: 'PUT',
             headers: {
@@ -22,6 +22,7 @@ export default function UserEditAccountPage({user}) {
                 username: user.username
             }
           })
+          setMode('read')
     }
 
     if (mode === 'read') {
@@ -37,18 +38,12 @@ export default function UserEditAccountPage({user}) {
             <Container>
                 <FormControl>
                     <InputLabel>First Name</InputLabel><Input value={firstName} onChange={(e) => setFirstName(e.target.value)} />
-                </FormControl>
+                </FormControl><br /><br />
                 <FormControl>
                     <InputLabel>Last Name</InputLabel><Input value={lastName} onChange={(e) => setLastName(e.target.value)} />
-                </FormControl>
-                <FormControl>
-                    <Button 
-                        variant='contained' 
-                        onClick={() => {
-                            setMode('read')
-                            handleNameSave()
-                        }}
-                    >Save</Button>
+                </FormControl><br />
+                <FormControl sx={{mt: '10px'}}>
+                    <Button variant='contained' onClick={handleNameSave}>Save</Button>
                 </FormControl>
             </Container>
         )
