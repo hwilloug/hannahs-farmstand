@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, UserAddress, Product, ProductCategory, ProductDiscount, Option, ProductInventory
+from .models import User, UserAddress, Product, ProductCategory, ProductDiscount, Option, ProductInventory, OrderDetail
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -42,3 +42,9 @@ class ProductInventorySerializer(serializers.ModelSerializer):
     class Meta: 
         model = ProductInventory
         fields = ['id', 'quantity', 'product_id', 'created_at', 'modified_at', 'deleted_at']
+
+
+class OrderDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderDetail
+        fields = ['id', 'user_id', 'total', 'tax', 'shipping_cost', 'payment_id', 'address_line1', 'address_line2', 'city', 'state', 'postal_code', 'country', 'telephone', 'tracking_no', 'shipped', 'created_at', 'modified_at']

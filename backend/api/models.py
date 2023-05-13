@@ -117,26 +117,28 @@ class PaymentDetails(models.Model):
     modified_at = models.DateTimeField(default=timezone.now)
 
 
-class OrderDetails(models.Model):
+class OrderDetail(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.PROTECT)
     total = models.FloatField()
     tax = models.FloatField()
     shipping_cost = models.FloatField()
     payment_id = models.OneToOneField(PaymentDetails, on_delete=models.CASCADE)
+    recipient_name = models.CharField(max_length=64)
     address_line1 = models.CharField(max_length=64)
     address_line2 = models.CharField(max_length=64)
     city = models.CharField(max_length=64)
+    state = models.CharField(max_length=2)
     postal_code = models.CharField(max_length=6)
     country = models.CharField(max_length=64)
     telephone = models.IntegerField()
-    tracking_no = models.CharField(max_length=40)
+    tracking_no = models.CharField(max_length=40, blank=True, null=True)
     shipped = models.BooleanField()
     created_at = models.DateTimeField(default=timezone.now)
     modified_at = models.DateTimeField(default=timezone.now)
 
 
 class OrderItems(models.Model):
-    order_id = models.ForeignKey(OrderDetails, on_delete=models.CASCADE)
+    order_id = models.ForeignKey(OrderDetail, on_delete=models.CASCADE)
     product_id = models.ForeignKey(Product, on_delete=models.PROTECT)
     quantity = models.IntegerField()
     created_at = models.DateTimeField(default=timezone.now)

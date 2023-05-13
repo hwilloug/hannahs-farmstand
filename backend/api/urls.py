@@ -4,6 +4,8 @@ from .user_views import (
     UserDetailApiView,
     UserAddressApiView,
     UserAddressDetailApiView,
+    UserOrderApiView,
+    UserOrderDetailApiView,
     WhoAmIView
 )
 from .product_views import (
@@ -17,6 +19,8 @@ urlpatterns = [
     path('users/<int:user_id>/', UserDetailApiView.as_view()),
     path('users/<int:user_id>/addresses/', UserAddressApiView.as_view()),
     path('users/<int:user_id>/addresses/<int:address_id>/', UserAddressDetailApiView.as_view()),
+    path('users/<int:user_id>/orders/', UserOrderApiView.as_view()),
+    path('users/<int:user_id>/orders/<int:order_id>/', UserOrderDetailApiView.as_view()),
     path('products/', ProductListApiView.as_view()),
     path('products/<int:product_id>/', ProductDetailApiView.as_view())
 ]
