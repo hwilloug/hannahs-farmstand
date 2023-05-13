@@ -21,7 +21,7 @@ const Profile = ({user}) => {
     user && (
       <Container>
         <Box sx={{ display: 'flex' }}>
-          <Button sx={{color: 'white'}} onClick={handleOpenNavMenu}>{user.username}</Button>
+          <Button sx={{color: 'white'}} onClick={handleOpenNavMenu}>{user.first_name || user.username}</Button>
         </Box>
         <Menu
           id="user-appbar"

@@ -47,7 +47,7 @@ function App() {
 
   useEffect(() => {
     whoAmI()
-  })
+  }, [user])
 
   return (
     <div className="App">

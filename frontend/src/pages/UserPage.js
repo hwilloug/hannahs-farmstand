@@ -3,8 +3,9 @@ import { useState } from "react";
 import UserEditAccountPage from "./UserEditAccountPage";
 import UserAddressesPage from "./UserAddressesPage";
 import UserOrdersPage from "./UserOrdersPage";
+import { withAuthenticationRequired } from "@auth0/auth0-react";
 
-export default function UserPage({user}) {
+function UserPage({user}) {
 
     const [tab, setTab] = useState(0)
 
@@ -47,14 +48,16 @@ export default function UserPage({user}) {
                 <Tab label="my orders" />
             </Tabs>
             <TabPanel value={tab} index={0}>
-                <UserEditAccountPage />
+                <UserEditAccountPage user={user} />
             </TabPanel>
             <TabPanel value={tab} index={1}>
-                <UserAddressesPage />
+                <UserAddressesPage user={user} />
             </TabPanel>
             <TabPanel value={tab} index={2}>
-                <UserOrdersPage />
+                <UserOrdersPage user={user} />
             </TabPanel>
         </Container>
     )
 }
+
+export default withAuthenticationRequired(UserPage)
