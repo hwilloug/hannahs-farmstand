@@ -3,8 +3,13 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Image } from 'mui-image'
 import axios from 'axios'
+import { getCookie } from "../utils/getCookie";
+import Cookies from 'universal-cookie';
 
-export default function ProductPage() {
+
+export default function ProductPage({user}) {
+
+    const cookies = new Cookies();
 
     let { productId } = useParams()
     const [productDetail, setProductDetail] = useState({})  
@@ -18,13 +23,52 @@ export default function ProductPage() {
     }
 
     const getProductDetail = async (productId) => {
-        const result = await axios(`/api/products/${productId}`)
+        const result = await axios(`/api/products/${productId}/`)
         setProductDetail(result.data)
     }
 
     useEffect(() => {
         getProductDetail(productId)
     }, [productId])
+
+    const submitAddToCart = async () => {
+        if (user !== undefined) {
+            const data = {
+                user_id: user.id,
+                product_id: productId,
+                quantity
+            }
+            const currentCart = await axios.get(`/api/users/${user.id}/cart`)
+            let found = false
+            for (var i in currentCart.data) {
+                console.log(currentCart.data[i].product_id, productId)
+                if (currentCart.data[i].product_id == productId) {
+                    await axios({
+                        url: `/api/users/${user.id}/cart/${currentCart.data[i].id}/`,
+                        method: 'PUT',
+                        headers: {
+                            'X-CSRFToken': getCookie('csrftoken')
+                        },
+                        data
+                    })
+                    found = true
+                    break
+                }
+            }
+            if (!found) {
+                await axios({
+                    url: `/api/users/${user.id}/cart/`,
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    data
+                })
+            }
+        } else {
+            cookies.set('cart', {...cookies.get('cart'), [productId]: {quantity, product_id: productId}}, { path: '/' })
+        }
+    }
 
     return (
         <Container sx={{ p: '50px', mx: 'auto', my: '50px', display: 'flex', backgroundColor: 'white', minHeight: '80vh' }}>
@@ -52,14 +96,15 @@ export default function ProductPage() {
                         {productDetail.quantity} {productDetail.sku} left in stock.
                     </Typography>
                 }
-                <Container disableGutters sx={{mt: '40px'}} sx={{display: 'flex', alignItems: 'center'}}>
+                <Container disableGutters sx={{mt: '20px', display: 'flex', alignItems: 'center'}}>
                     <Input 
                         type='number' 
                         value={quantity}
                         onChange={onQuantityChange}
+                        sx={{"& input": {textAlign: "center"}}}
                     /><Typography sx={{ml: '10px'}}>{productDetail.sku}</Typography>
                 </Container>
-                <Button variant='contained' color='secondary' sx={{mt: '20px'}}>Add to cart</Button>
+                <Button variant='contained' color='secondary' sx={{mt: '20px'}} onClick={submitAddToCart}>Add to cart</Button>
             </Container>
         </Container>
     )

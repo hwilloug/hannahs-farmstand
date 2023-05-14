@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, UserAddress, Product, ProductCategory, ProductDiscount, Option, ProductInventory, OrderDetail
+from .models import User, UserAddress, Product, ProductCategory, ProductDiscount, Option, ProductInventory, OrderDetail, CartItem, PaymentDetail, OrderItem
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -48,3 +48,21 @@ class OrderDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderDetail
         fields = ['id', 'user_id', 'total', 'tax', 'shipping_cost', 'payment_id', 'address_line1', 'address_line2', 'city', 'state', 'postal_code', 'country', 'telephone', 'tracking_no', 'shipped', 'created_at', 'modified_at']
+
+
+class OrderItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderItem
+        fields = ['id', 'order_id', 'product_id', 'quantity', 'created_at', 'modified_at']
+
+
+class CartItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CartItem
+        fields = ['id', 'user_id', 'product_id', 'quantity', 'created_at', 'modified_at']
+
+
+class PaymentDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PaymentDetail
+        fields = ['id', 'amount', 'provider', 'status', 'created_at', 'modified_at']

@@ -6,7 +6,9 @@ from .user_views import (
     UserAddressDetailApiView,
     UserOrderApiView,
     UserOrderDetailApiView,
-    WhoAmIView
+    WhoAmIView,
+    UserCartApiView,
+    UserCartDetailApiView
 )
 from .product_views import (
     ProductListApiView,
@@ -21,6 +23,8 @@ urlpatterns = [
     path('users/<int:user_id>/addresses/<int:address_id>/', UserAddressDetailApiView.as_view()),
     path('users/<int:user_id>/orders/', UserOrderApiView.as_view()),
     path('users/<int:user_id>/orders/<int:order_id>/', UserOrderDetailApiView.as_view()),
+    path('users/<int:user_id>/cart/', UserCartApiView.as_view()),
+    path('users/<int:user_id>/cart/<int:cart_item_id>/', UserCartDetailApiView.as_view()),
     path('products/', ProductListApiView.as_view()),
     path('products/<int:product_id>/', ProductDetailApiView.as_view())
 ]

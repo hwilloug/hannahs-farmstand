@@ -128,7 +128,7 @@ export default function NavBar({user}) {
               <LoginButton />
             </Box>
             <Box sx={{ml: '20px'}}>
-              <ShoppingBasketIcon />
+              <Link href="/cart"><ShoppingBasketIcon sx={{color: 'white'}}/></Link>
             </Box>
           </Toolbar>
         </Container>

@@ -2,7 +2,7 @@ import { Container, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import axios from 'axios'
 
-export default function UserOrdersPage(user) {
+export default function UserOrdersPage({user}) {
 
     const [orders, setOrders] = useState([])
 

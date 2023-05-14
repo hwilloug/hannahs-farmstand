@@ -94,22 +94,15 @@ class ProductOption(models.Model):
 
 
 # Shopping Process
-class ShoppingSession(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.PROTECT)
-    total = models.FloatField()
-    created_at = models.DateTimeField(default=timezone.now)
-    modified_at = models.DateTimeField(default=timezone.now)
-
-
 class CartItem(models.Model):
-    session_id = models.ForeignKey(ShoppingSession, on_delete=models.PROTECT)
+    user_id = models.ForeignKey(User, on_delete=models.PROTECT)
     product_id = models.ForeignKey(Product, on_delete=models.PROTECT)
     quantity = models.IntegerField()
     created_at = models.DateTimeField(default=timezone.now)
     modified_at = models.DateTimeField(default=timezone.now)
 
 
-class PaymentDetails(models.Model):
+class PaymentDetail(models.Model):
     amount = models.FloatField()
     provider = models.CharField(max_length=24)
     status = models.CharField(max_length=12)
@@ -122,7 +115,7 @@ class OrderDetail(models.Model):
     total = models.FloatField()
     tax = models.FloatField()
     shipping_cost = models.FloatField()
-    payment_id = models.OneToOneField(PaymentDetails, on_delete=models.CASCADE)
+    payment_id = models.OneToOneField(PaymentDetail, on_delete=models.CASCADE)
     recipient_name = models.CharField(max_length=64)
     address_line1 = models.CharField(max_length=64)
     address_line2 = models.CharField(max_length=64)
@@ -137,7 +130,7 @@ class OrderDetail(models.Model):
     modified_at = models.DateTimeField(default=timezone.now)
 
 
-class OrderItems(models.Model):
+class OrderItem(models.Model):
     order_id = models.ForeignKey(OrderDetail, on_delete=models.CASCADE)
     product_id = models.ForeignKey(Product, on_delete=models.PROTECT)
     quantity = models.IntegerField()

@@ -2,8 +2,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import permissions
-from .models import User, UserAddress, OrderDetail
-from .serializers import UserSerializer, UserAddressSerializer, OrderDetailSerializer
+from .models import User, UserAddress, OrderDetail, CartItem
+from .serializers import UserSerializer, UserAddressSerializer, OrderDetailSerializer, CartItemSerializer
 
 
 class WhoAmIView(APIView):
@@ -429,6 +429,149 @@ class UserOrderDetailApiView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
         user_order_instance.delete()
+        return Response(
+            {"res": "Object deleted!"},
+            status=status.HTTP_200_OK
+        )
+    
+
+class UserCartApiView(APIView):
+    def get_object(self, user_id):
+        '''
+        Helper method to get the object with given user_id
+        '''
+        try:
+            return User.objects.filter(id=user_id)
+        except User.DoesNotExist:
+            return []
+
+    def get_cart_object(self, user_id):
+        '''
+        Helper method to get the object with given user_id
+        '''
+        try:
+            return CartItem.objects.filter(user_id=user_id)
+        except CartItem.DoesNotExist:
+            return []
+        
+    def get(self, request, user_id, *args, **kwargs):
+        '''
+        Retrieves the user cart item with given user_id
+        '''
+        user_instance = self.get_object(user_id)
+        if not user_instance:
+            return Response(
+                'Object with id does not exist',
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        user_cart_instance = self.get_cart_object(user_id)
+        if not user_cart_instance:
+            return Response(
+                [],
+                status=status.HTTP_200_OK
+            )
+
+        serializer = CartItemSerializer(user_cart_instance, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, user_id, *args, **kwargs):
+        '''
+        Create the cart item Detail with given session data
+        '''
+        data = {
+            'user_id': user_id,
+            'product_id': request.data.get('product_id'),
+            'quantity': request.data.get('quantity')
+        }
+        cart_serializer = CartItemSerializer(data=data)
+        if cart_serializer.is_valid():
+            cart_serializer.save()
+            return Response(cart_serializer.data, status=status.HTTP_201_CREATED)
+        
+        Response(cart_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserCartDetailApiView(APIView):
+    def get_object(self, user_id):
+        '''
+        Helper method to get the object with given user_id
+        '''
+        try:
+            return User.objects.filter(id=user_id)
+        except User.DoesNotExist:
+            return []
+
+    def get_cart_object(self, cart_id, user_id):
+        '''
+        Helper method to get the object with given user_id
+        '''
+        try:
+            return CartItem.objects.get(user_id=user_id, id=cart_id)
+        except CartItem.DoesNotExist:
+            return None
+        
+    def get(self, request, user_id, cart_item_id, *args, **kwargs):
+        '''
+        Retrieves the user session with given user_id
+        '''
+        user_instance = self.get_object(user_id)
+        if not user_instance:
+            return Response(
+                'Object with id does not exist',
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        user_cart_instance = self.get_cart_object(cart_item_id, user_id)
+        if not user_cart_instance:
+            return Response(
+                'Object with id does not exist',
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        serializer = CartItemSerializer(user_cart_instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def put(self, request, user_id, cart_item_id, *args, **kwargs):
+        '''
+        Updates the user session with given user_id if exists
+        '''
+        user_instance = self.get_object(user_id)
+        if not user_instance:
+            return Response(
+                {"res": "Object with user id does not exists"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        user_cart_instance = self.get_cart_object(cart_item_id, user_id)
+        if not user_cart_instance:
+            return Response(
+                {"res": "Object with address id does not exists"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        data = {
+            'user_id': user_id,
+            'product_id': request.data.get('product_id'),
+            'quantity': request.data.get('quantity')
+        }
+        serializer = CartItemSerializer(instance=user_cart_instance, data=data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, user_id, cart_item_id, *args, **kwargs):
+        '''
+        Deletes the session with given user_id if exists
+        '''
+        user_cart_instance = self.get_cart_object(cart_item_id, user_id)
+        if not user_cart_instance:
+            return Response(
+                {"res": "Object with user id does not exists"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        user_cart_instance.delete()
         return Response(
             {"res": "Object deleted!"},
             status=status.HTTP_200_OK

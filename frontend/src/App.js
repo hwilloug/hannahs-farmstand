@@ -9,6 +9,7 @@ import axios from 'axios'
 import UserPage from './pages/UserPage';
 import './App.css'
 import Footer from './components/Footer';
+import CartPage from './pages/CartPage';
 
 function App() {
 
@@ -23,11 +24,15 @@ function App() {
     },
     {
       path: "products/:productId",
-      element: <ProductPage />
+      element: <ProductPage user={userDetail} />
     },
     {
       path: "account",
       element: <UserPage user={userDetail} />
+    },
+    {
+      path: "cart",
+      element: <CartPage user={userDetail} />
     }
   ]);  
 
